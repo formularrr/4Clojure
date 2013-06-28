@@ -114,6 +114,15 @@
        (recur mi (rem ma mi))))) 1023 858)
 
 
+;;81
+;;Write a function which returns the intersection of two sets. The intersection is the sub-set of items that each set has in common.
+((fn [set1 set2]
+   (let [all (clojure.set/union set1 set2)
+         diff1 (clojure.set/difference set1 set2)
+         diff2 (clojure.set/difference set2 set1)
+         diff (clojure.set/union diff1 diff2)]
+     (clojure.set/difference all diff)))  #{0 1 2 3} #{2 3 4 5})
+
 ;;89
 ;;Write a function which multiplies two numbers and returns the result as a sequence of its digits.
 ((fn [x y]
