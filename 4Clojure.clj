@@ -64,9 +64,36 @@
      true
      false)) '(1 2 1))
 
+
+;;28
+;;Write a function which flattens a sequence
+(#(filter (complement sequential?)
+          (rest (tree-seq sequential? seq %))) '(1 2 3))
+
+
 ;;29
 ;;Write a function which takes a string and returns a new string containing only the capital letters.
 (#(apply str (re-seq #"[A-Z]+" %)) "SSSSsss")
+
+
+;;30
+;;Write a function which removes consecutive duplicates from a sequence.
+((fn [n]
+   (loop [rs '() ori (seq n)]
+     (if (empty? (rest ori))
+       (reverse (conj rs (first ori)))
+       (if (= (first ori) (fnext ori))
+         (recur rs (rest ori))
+         (recur (conj rs (first ori)) (rest ori)))))) [1 1 2 2 4 4 3])
+
+
+;;32
+;;Write a function which duplicates each element of a sequence.
+((fn [n]
+   (loop [rs '() ori n]
+     (if (empty? ori)
+       rs
+       (recur (concat rs (take 2 (repeat (first ori)))) (rest ori))))) '([1 3] s))
 
 
 ;;33
@@ -103,6 +130,12 @@
 ;;42
 ;;Write a function which calculates factorials.
 (#(reduce * (range 1 (+ % 1))) 5)
+
+
+;;49
+;;Write a function which will split a sequence into two parts.
+((fn [idx se]
+  [(vec (take idx se)) (vec (drop idx se))]) 3 [1 2 3 4 5 6])
 
 
 ;;66
