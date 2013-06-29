@@ -1,16 +1,21 @@
-;;#21
+(ns solutions)
+;;#21.Nth Element
 ;;Write a function which returns the Nth element from a sequence.
+;;first
 ((fn [x y]
    (loop [element x cnt y]
      (if (= cnt 0)
        (first element)
        (recur (rest element) (- cnt 1))))) '(4 5 6 7) 2)
+;;second
+((fn [se n]
+   (first (drop n se))) '(4 5 6 7) 2)
 
 
 
-;;#22
+;;#22 Count a Sequence
 ;;Write a function which returns the total number of elements in a sequence.
-
+;;first
 ((fn [x]
    (loop [element x cnt 0]
      (if (empty? element)
@@ -46,6 +51,7 @@
 
 ;;26
 ;;Write a function which returns the first X fibonacci numbers.
+;;first solution
 ((fn [x]
    (loop [element '(1 1) cnt 2]
      (cond  (= 1 x) '(1)
@@ -55,6 +61,12 @@
             (recur (cons (+ (nth element 0) (nth element 1)) element)
                    (+ cnt 1)))))
        8)
+;;second solution
+((fn [n]
+   (take n
+         (map first
+              (iterate (fn [[a b]] [b (+ a b)]) [1 1]))))
+ 3)
 
 
 ;;27

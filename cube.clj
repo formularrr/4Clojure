@@ -1,4 +1,4 @@
-(ns examples.introduction)
+(ns cube)
 (defn abs [x]
     (if (< x 0)
         (* -1 x)
@@ -24,3 +24,5 @@
   (if (good-enough? x y)
       y
       (cube x (+ y 0.01))))
+
+(cube 27 3)
