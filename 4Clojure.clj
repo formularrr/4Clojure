@@ -1,13 +1,7 @@
 (ns solutions)
+
 ;;#21.Nth Element
 ;;Write a function which returns the Nth element from a sequence.
-;;first
-((fn [x y]
-   (loop [element x cnt y]
-     (if (= cnt 0)
-       (first element)
-       (recur (rest element) (- cnt 1))))) '(4 5 6 7) 2)
-;;second
 ((fn [se n]
    (first (drop n se))) '(4 5 6 7) 2)
 
@@ -35,33 +29,15 @@
 
 ;;24
 ;;Write a function which returns the sum of a sequence of numbers.
+(reduce + (list 0 -2 5 5))
 
-((fn [x]
-   (loop [element x rs 0]
-     (if (empty? element)
-       rs
-       (recur (rest element) (+ rs (first element)))))) '(0 0 -1))
-
-
-;;25
+;;25 Find the odd numbers
 ;;Write a function which returns only the odd numbers from a sequence.
-
-(filter #(not( even? %))'(1 2 3 4))
+(filter #(odd? %)'(1 2 3 4))
 
 
 ;;26
 ;;Write a function which returns the first X fibonacci numbers.
-;;first solution
-((fn [x]
-   (loop [element '(1 1) cnt 2]
-     (cond  (= 1 x) '(1)
-            (= 2 x) '(1 1)
-            (= cnt x) (reverse element)
-            :else
-            (recur (cons (+ (nth element 0) (nth element 1)) element)
-                   (+ cnt 1)))))
-       8)
-;;second solution
 ((fn [n]
    (take n
          (map first
@@ -98,6 +74,10 @@
          (recur rs (rest ori))
          (recur (conj rs (first ori)) (rest ori)))))) [1 1 2 2 4 4 3])
 
+
+;;31 Pack a sequence
+;;Write a function which packs consecutive duplicates into sub-lists.
+(partition-by identity [1 1 2 1 1 1 ])
 
 ;;32
 ;;Write a function which duplicates each element of a sequence.
@@ -138,6 +118,18 @@
              (recur (first element) (rest element))
              (recur max-number (rest element)))))) 1 2 3 5 4)
 
+;;39 Interleave Two Seqs
+;;Write a function which takes two sequences and returns the first item from each, then the second item from each, then the third, etc.
+((fn inter [c1 c2]
+   (lazy-seq
+    (let [s1 (seq c1) s2 (seq c2)]
+      (when (and s1 s2)
+        (cons (first s1)
+              (cons (first s2)
+                    (inter (rest s1) (rest s2))))))))
+  [1 2] [2])
+
+
 
 ;;42
 ;;Write a function which calculates factorials.
@@ -148,6 +140,15 @@
 ;;Write a function which will split a sequence into two parts.
 ((fn [idx se]
   [(vec (take idx se)) (vec (drop idx se))]) 3 [1 2 3 4 5 6])
+
+
+;;61 Map construction
+;;Write a function which takes a vector of keys and a vector of values and constructs a map from them
+((fn [s1 s2]
+  (apply assoc {}
+   (reverse
+    (interleave s2 s1))))
+ [:a :b :c] [1 2 3])
 
 
 ;;66
