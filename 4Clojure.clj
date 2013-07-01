@@ -271,6 +271,7 @@
        (recur (quot rs 10) (cons (rem rs 10) ve ))))) 99 9)
 
 
+     (int (Math/pow exp base)))) 2) 16)
 ;;118 Re-implement Map
 ;;Map is one of the core elements of a functional programming language. Given a function f and an input sequence s, return a lazy sequence of (f x) for each element x in s.
 ((fn re-map [f se]
