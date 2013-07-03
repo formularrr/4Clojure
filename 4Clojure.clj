@@ -184,6 +184,14 @@
   [(vec (take idx se)) (vec (drop idx se))]) 3 [1 2 3 4 5 6])
 
 
+;;50 Split by Type
+;;Write a function which takes a sequence consisting of items with different types and splits them up into a set of homogeneous sub-sequences. The internal order of each sub-sequence should be maintained, but the sub-sequences themselves can be returned in any order (this is why 'set' is used in the test cases).
+((fn [coll]
+   (map #(second %)
+        (group-by class coll)))
+ [:a "foo" "bar" :b])
+
+
 ;;54 Partition a Sequence
 ;;Write a function which returns a sequence of lists of x items each. Lists of less than x items should not be returned.
 ((fn part [n se]
@@ -201,6 +209,13 @@
      (zipmap
        (map #(first %) rs)
         (map #(count (second %)) rs)))) [1 1 2 3 2 1 1])
+
+
+;;56 Find Distinct Items
+;;Write a function which removes the duplicates from a sequence. Order of the items must be maintained.
+(#(let [s (map first (group-by identity %))]
+    (if (= (count s) (count %)) % s))
+  [1 2 1 3 1 2 4])
 
 
 ;;61 Map construction
@@ -279,6 +294,16 @@
        ve
        (recur (quot rs 10) (cons (rem rs 10) ve ))))) 99 9)
 
+
+;;102 intoCamelCase
+;;When working with java, you often need to create an object with fieldsLikeThis, but you'd rather work with a hashmap that has :keys-like-this until it's time to convert. Write a function which takes lower-case hyphen-separated strings and converts them to camel-case strings.
+((fn [coll]
+   (let [s (clojure.string/split coll #"\-")]
+     (apply str
+            (first s)
+            (map #(clojure.string/capitalize %)
+                 (drop 1 s)))))
+ "multi-word-key")
 
 ;;107 Simple closures
 ;;Lexical scope and first-class functions are two of the most basic building blocks of a functional language like Clojure. When you combine the two together, you get something very powerful called lexical closures. With these, you can exercise a great deal of control over the lifetime of your local bindings, saving their values for use later, long after the code you're running now has finished.
