@@ -286,6 +286,23 @@
     (clojure.set/difference s2 s1))) #{1 2 3 4 5 6} #{1 3 5 7})
 
 
+;;90 Cartesian Product
+;;Write a function which calculates the Cartesian product of two sets.
+((fn [coll1 coll2]
+   (into #{}
+         ((fn [coll1 coll2]
+           (loop [coll coll2 rs []]
+             (if (empty? coll)
+               rs
+               (recur (rest coll)
+                      (concat rs
+                             (partition 2
+                                        (interleave coll1
+                                                    (repeat (first coll)))))))))
+          coll1 coll2)))
+ #{"ace" "king" "queen"}  #{"♠" "♥" "♦" "♣"})
+
+
 ;;99 Product Digits
 ;;Write a function which multiplies two numbers and returns the result as a sequence of its digits.
 ((fn [x y]
@@ -319,6 +336,20 @@
    (if-not (empty? se)
     (lazy-seq (cons (f (first se))
        (re-map f (rest se)))))) inc [1 2 3])
+
+
+;;122 Read a binary number
+;;Convert a binary number, provided in the form of a string, to its numerical value.
+((fn [coll]
+  (let [v (vec (reverse coll))]
+    (int (loop [cnt (dec (count v)) rs 0]
+          (if (neg? cnt)
+            rs
+            (if (= \0 (v cnt))
+              (recur (dec cnt) rs)
+              (recur (dec cnt) 
+                     (+ rs (Math/pow 2 cnt)))))))))
+  "10101010101")
 
 
 ;;134
