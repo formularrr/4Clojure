@@ -10,11 +10,11 @@
 ;;#22 Count a Sequence
 ;;Write a function which returns the total number of elements in a sequence.
 ;;first
-((fn [x]
-   (loop [element x cnt 0]
-     (if (empty? element)
-       cnt
-       (recur (rest element) (+ cnt 1))))) [[12]])
+((fn count-seq [coll]
+   (if (empty? (seq coll))
+       0
+       (inc (count-seq (rest (seq coll)))))) 
+ "Hello World")
 
 
 ;;23
@@ -66,13 +66,10 @@
 
 ;;30
 ;;Write a function which removes consecutive duplicates from a sequence.
-((fn [n]
-   (loop [rs '() ori (seq n)]
-     (if (empty? (rest ori))
-       (reverse (conj rs (first ori)))
-       (if (= (first ori) (fnext ori))
-         (recur rs (rest ori))
-         (recur (conj rs (first ori)) (rest ori)))))) [1 1 2 2 4 4 3])
+((fn [coll]
+   (map #(first %) 
+        (partition-by identity (seq coll))))  
+ [1 1 2 3 3 2 2 3])
 
 
 ;;31 Pack a sequence
@@ -80,17 +77,13 @@
 (partition-by identity [1 1 2 1 1 1 ])
 
 
-;;32
+;;32 Duplicate a SequenceSolutions
 ;;Write a function which duplicates each element of a sequence.
-((fn [n]
-   (loop [rs '() ori n]
-     (if (empty? ori)
-       rs
-       (recur (concat rs (take 2 (repeat (first ori)))) (rest ori))))) '([1 3] s))
+(#(interleave % %) [[1 2] [3 4]])
 
 
 ;;33
-;;Write a function which replicates each element of a sequence a variable number of times.
+;;Write a function which freplicates each element of a sequence a variable number of times.
 ((fn [x y]
    (loop [rs '() element x]
      (if (empty? element) rs
@@ -301,6 +294,22 @@
                                                     (repeat (first coll)))))))))
           coll1 coll2)))
  #{"ace" "king" "queen"}  #{"♠" "♥" "♦" "♣"})
+
+
+;;97 Pascal's Triangle
+;;Pascal's triangle is a triangle of numbers computed using the following rules:
+;;The first row is 1.
+;;Each successive row is computed by adding together adjacent numbers in the row above, and adding a 1 to the beginning and end of the row.
+;;Write a function which returns the nth row of Pascal's Triangle. 
+((fn pascal [n]
+     (cond (= n 1) [1]
+           (= n 2) [1 1]
+           :else (flatten (list 1
+                                (map #(+ (first %) (second %)) 
+                                     (partition 2 1 (pascal (dec n))))
+                                1))))
+ 6)
+
 
 
 ;;99 Product Digits
