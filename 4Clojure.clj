@@ -211,6 +211,20 @@
   [1 2 1 3 1 2 4])
 
 
+;;59 Juxtaposition
+;;Take a set of functions and return a new function that takes a variable number of arguments and returns a sequence containing the result of applying each function left-to-right to the argument list.
+(((fn [& f-more]
+   (fn [& coll-more]
+     (loop [f f-more rs []]
+       (if (empty? f)
+         rs
+         (recur (rest f)
+                (conj rs 
+                      (apply (first f) coll-more)))))))
+  + max min) 
+ 2 3 5 1 6 4)
+
+
 ;;61 Map construction
 ;;Write a function which takes a vector of keys and a vector of values and constructs a map from them
 ((fn [s1 s2]
@@ -294,6 +308,18 @@
                                                     (repeat (first coll)))))))))
           coll1 coll2)))
  #{"ace" "king" "queen"}  #{"♠" "♥" "♦" "♣"})
+
+
+;;95 To Tree, or not to Tree
+;;Write a predicate which checks whether or not a given sequence represents a binary tree. Each node in the tree must have a value, a left child, and a right child.
+((fn [coll]
+   (let [tr (vec (flatten coll))]
+     (cond (even? (count tr)) false
+           (not (= (count 
+                    (filter #(if (false? %) false true) tr)) 
+                   (count tr))) false
+     :else true))) 
+'(:a (:b nil nil) nil))
 
 
 ;;97 Pascal's Triangle
