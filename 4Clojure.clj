@@ -133,14 +133,14 @@
                 (repeat (count se) ad)))))
  :z [:a :b :c])
 
+
 ;;41 Drop Every Nth Item
 ;;Write a function which drops every Nth item from a sequence.
-((fn [se n]
-   (loop [s (empty se) s1 se]
-     (if (< (count s1) n)
-       (into s s1)
-       (recur (into s (butlast (take n s1))) (drop n s1)))))
- [1 2 3 4 5 6 7 8] 3)
+((fn [coll idx]
+   (flatten
+    (map #(take (dec idx) %) 
+         (partition-all 3 idx coll))))
+ [1 2 3 4 5 ] 3)
 
 
 ;;42
