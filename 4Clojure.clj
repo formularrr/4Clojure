@@ -264,6 +264,16 @@
               (recur (rest under))))))) (range))) 5)
 
 
+;;70 Word Sorting
+;;Write a function that splits a sentence up into a sorted list of words. Capitalization should not affect sort order and punctuation should be ignored.
+((fn [coll]
+   (let [s (apply str (butlast (seq coll)))
+         ss (clojure.string/split s #"\ ")
+         ls (clojure.string/split (clojure.string/lower-case s) #"\ ")]
+     (map #(second %) (sort (zipmap ls ss))))) 
+ "Have a nice day.")
+
+
 ;;81
 ;;Write a function which returns the intersection of two sets. The intersection is the sub-set of items that each set has in common.
 ((fn [set1 set2]
