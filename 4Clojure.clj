@@ -13,7 +13,7 @@
 ((fn count-seq [coll]
    (if (empty? (seq coll))
        0
-       (inc (count-seq (rest (seq coll)))))) 
+       (inc (count-seq (rest (seq coll))))))
  "Hello World")
 
 
@@ -67,8 +67,8 @@
 ;;30
 ;;Write a function which removes consecutive duplicates from a sequence.
 ((fn [coll]
-   (map #(first %) 
-        (partition-by identity (seq coll))))  
+   (map #(first %)
+        (partition-by identity (seq coll))))
  [1 1 2 3 3 2 2 3])
 
 
@@ -138,7 +138,7 @@
 ;;Write a function which drops every Nth item from a sequence.
 ((fn [coll idx]
    (flatten
-    (map #(take (dec idx) %) 
+    (map #(take (dec idx) %)
          (partition-all 3 idx coll))))
  [1 2 3 4 5 ] 3)
 
@@ -211,6 +211,17 @@
   [1 2 1 3 1 2 4])
 
 
+;;58 Function Composition
+(((fn [& fn-ls]
+    (fn [& args]
+      (let [fs (reverse (list* fn-ls))]
+        (loop [rs (apply (first fs) args) fs (next fs)]
+          (if fs
+            (recur ((first fs) rs) (next fs))
+            rs)))))
+  zero? #(mod % 8) +)
+ 3 5 7 9)
+
 ;;59 Juxtaposition
 ;;Take a set of functions and return a new function that takes a variable number of arguments and returns a sequence containing the result of applying each function left-to-right to the argument list.
 (((fn [& f-more]
@@ -219,9 +230,9 @@
        (if (empty? f)
          rs
          (recur (rest f)
-                (conj rs 
+                (conj rs
                       (apply (first f) coll-more)))))))
-  + max min) 
+  + max min)
  2 3 5 1 6 4)
 
 
@@ -240,6 +251,19 @@
           (cons arg
                 (lazy-seq (ite f (f arg)))))
          #(* 2 %) 1))
+
+
+;;64 Group a Sequence
+;;Given a function f and a sequence s, write a function which returns a map. The keys should be the values of f applied to each item in s. The value at each key should be a vector of corresponding items in the order they appear in s.
+((fn [f coll]
+   (let [rs (distinct (map f coll))]
+     (loop [ret {} r rs]
+       (if (empty? r)
+         ret
+         (recur (assoc ret (first r) (filter #(= (first r) (f %)) coll))
+                (rest r))))))
+  #(apply / %) [[1 2] [2 4] [4 6] [3 6]])
+
 
 ;;66
 ;;Given two integers, write a function which returns the greatest common divisor.
@@ -270,7 +294,7 @@
    (let [s (apply str (butlast (seq coll)))
          ss (clojure.string/split s #"\ ")
          ls (clojure.string/split (clojure.string/lower-case s) #"\ ")]
-     (map #(second %) (sort (zipmap ls ss))))) 
+     (map #(second %) (sort (zipmap ls ss)))))
  "Have a nice day.")
 
 
@@ -325,10 +349,10 @@
 ((fn [coll]
    (let [tr (vec (flatten coll))]
      (cond (even? (count tr)) false
-           (not (= (count 
-                    (filter #(if (false? %) false true) tr)) 
+           (not (= (count
+                    (filter #(if (false? %) false true) tr))
                    (count tr))) false
-     :else true))) 
+     :else true)))
 '(:a (:b nil nil) nil))
 
 
@@ -336,16 +360,24 @@
 ;;Pascal's triangle is a triangle of numbers computed using the following rules:
 ;;The first row is 1.
 ;;Each successive row is computed by adding together adjacent numbers in the row above, and adding a 1 to the beginning and end of the row.
-;;Write a function which returns the nth row of Pascal's Triangle. 
+;;Write a function which returns the nth row of Pascal's Triangle.
 ((fn pascal [n]
      (cond (= n 1) [1]
            (= n 2) [1 1]
            :else (flatten (list 1
-                                (map #(+ (first %) (second %)) 
+                                (map #(+ (first %) (second %))
                                      (partition 2 1 (pascal (dec n))))
                                 1))))
  6)
 
+
+;;98 Equivalence Classes
+;;A function f defined on a domain D induces an equivalence relation on D, as follows: a is equivalent to b with respect to f if and only if (f a) is equal to (f b). Write a function with arguments f and D that computes the equivalence classes of D with respect to f.
+((fn [f coll]
+   (into #{}
+         (map #(into #{} (second %)) 
+              (group-by f coll)))) 
+ #(* % %) #{-2 -1 0 1 2})
 
 
 ;;99 Product Digits
@@ -392,9 +424,19 @@
             rs
             (if (= \0 (v cnt))
               (recur (dec cnt) rs)
-              (recur (dec cnt) 
+              (recur (dec cnt)
                      (+ rs (Math/pow 2 cnt)))))))))
   "10101010101")
+
+
+;;128 Recognize Playing Cards
+((fn [s]
+   (let [m {"D" :diamond "H" :heart "C" :club "S" :spade
+        "A" 12 "K" 11 "Q" 10 "J" 9 "10" 8 "9" 7 "8" 6 
+        "7" 5 "6" 4 "5" 3 "4" 2 "3" 1 "2" 0}
+         rs {}]
+    (assoc (assoc rs :suit (m (str (first s)))) :rank (m (str (second s)))))) 
+ "CA")
 
 
 ;;134
